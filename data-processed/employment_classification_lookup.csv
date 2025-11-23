@@ -1,0 +1,25 @@
+gpi_industry,gpi_naics,gopb_sector_id,gopb_sector,tdm_sector_id,tdm_sector,tdm_7_sector_id,tdm_7_sector,acs_sector_id,acs_industry_sectors,dws
+forestry fishing and hunting,113-115,1,Natural Resources,9,AGRI,4,AGRI,1,"Agriculture, forestry, fishing and hunting, and mining",113-114
+mining,21,2,Mining,10,MING,5,MING,1,"Agriculture, forestry, fishing and hunting, and mining",21
+utilities,22,3,Utilities,4,WSLE,2,IND,6,"Transportation and warehousing, and utilities",22
+construction,23,4,Construction,11,CONS,6,CONS,2,Construction,23
+manufacturing,31-33,5,Manufacturing,3,MANU,2,IND,3,Manufacturing,31-33
+wholesale trade,42,6,Wholesale Trade,4,WSLE,2,IND,4,Wholesale trade,42
+retail trade,44-45,7,Retail Trade,1,RETL,1,RET,5,Retail trade,44-45
+transportation and warehousing,48-49,8,Transportation & Warehousing,4,WSLE,2,IND,6,"Transportation and warehousing, and utilities",48-49
+information,51,9,Information,5,OFFI,3,OTH,7,Information,51
+finance and insurance,52,10,Finance & Insurance,8,OTHR,3,OTH,8,"Finance and insurance, and real estate and rental and leasing",52
+real estate and rental and leasing,53,11,"Real Estate, Rental & Leasing",8,OTHR,3,OTH,8,"Finance and insurance, and real estate and rental and leasing",53
+professional scientific and technical services,54,12,Professional & Technical Services,5,OFFI,3,OTH,9,"Professional, scientific, and management, and administrative and waste management services",54
+management of companies and enterprises,55,13,Management of Companies,5,OFFI,3,OTH,9,"Professional, scientific, and management, and administrative and waste management services",55
+administrative support waste management and remediation services,56,14,Administrative & Waste Services,8,OTHR,3,OTH,9,"Professional, scientific, and management, and administrative and waste management services",56
+educational services private,61,15,Educational Services,6,GVED,3,OTH,10,"Educational services, and health care and social assistance",61
+health care and social assistance,62,16,Health & Social Services,7,HLTH,3,OTH,10,"Educational services, and health care and social assistance",62
+arts entertainment and recreation,71,17,"Arts, Entertainment & Recreation",8,OTHR,3,OTH,11,"Arts, entertainment, and recreation, and accommodation and food services",71
+accommodation and food services,72,18,Accommodation & Food Services,2,FOOD,1,RET,11,"Arts, entertainment, and recreation, and accommodation and food services",72
+other services except public administration,81,19,Other Services,8,OTHR,3,OTH,12,Other services (except public administration),81
+federal civilian,FederalCivilian,21,Federal Civilian,6,GVED,3,OTH,13,Public administration,Ownership Code 1 & not 928
+federal military,FederalMilitary,22,Federal Military,6,GVED,3,OTH,14,Armed forces,Ownership Code 1 & 928
+farm,111-112,23,Farm,9,AGRI,4,AGRI,1,"Agriculture, forestry, fishing and hunting, and mining","111-112, 115"
+state government,StateGovernment,24,State Government,6,GVED,3,OTH,-1,State government,Ownership Code 2
+local government,LocalGovernment,25,Local Government,6,GVED,3,OTH,-1,Local government,Ownership Code 3
