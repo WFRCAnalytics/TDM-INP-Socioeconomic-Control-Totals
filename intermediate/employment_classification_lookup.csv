@@ -1,4 +1,4 @@
-gpi_industry,gpi_naics,gopb_sector_id,gopb_sector,tdm_sector_id,tdm_sector,tdm_7_sector_id,tdm_7_sector,acs_sector_id,acs_industry_sectors,dws
+GPI_INDUSTRY,GPI_NAICS,GOPB_SECTOR_ID,GOPB_SECTOR,TDM_SECTOR_ID,TDM_SECTOR,TDM_7_SECTOR_ID,TDM_7_SECTOR,ACS_SECTOR_ID,ACS_INDUSTRY_SECTORS,DWS
 forestry fishing and hunting,113-115,1,Natural Resources,9,AGRI,4,AGRI,1,"Agriculture, forestry, fishing and hunting, and mining",113-114
 mining,21,2,Mining,10,MING,5,MING,1,"Agriculture, forestry, fishing and hunting, and mining",21
 utilities,22,3,Utilities,4,WSLE,2,IND,6,"Transportation and warehousing, and utilities",22
