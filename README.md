@@ -158,22 +158,6 @@ Merge all intermediate datasets and prepare final model-ready SE data.
 
 # 📤 Final Outputs
 
-### **Employment**
-
-- `gpi_employment_by_county_df`
-- `tdm_employment_by_county_df`
-- `employment_split_df`
-
-### **Population**
-
-- `gpi_population_2023_df`
-- `gpi_population_2025plus_df`
-- `population_split_df`
-
-### **Final Model Files**
-
-- `se_final_df`
-- Dashboard-ready pivot tables
 - TDM socio-economic inputs
 
 ---
