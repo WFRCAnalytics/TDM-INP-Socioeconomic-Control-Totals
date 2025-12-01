@@ -2,160 +2,186 @@
 
 _Note: This repository contains code and data for estimating county level socio-economic totals for the Wasatch Front Travel Demand Model (TDM). The current implementation applies to model version 10, while all previous calculations from version 8.3.2 and version 9x are stored in the \_archive folder for reference._
 
-# GPI Socioeconomic Data Processing Workflow
+## Updated Process Documentation
 
-### End-to-End Documentation for Employment, Population, County Splits, and Finalization
+This repository contains the full, updated workflow for processing socioeconomic (SE) inputs for travel demand modeling.  
+The workflow has been revised to reflect the latest notebook structure and updated GPI inputs.
 
-This repository contains the full workflow for processing socioeconomic (SE) inputs used for travel demand modeling.  
-The workflow is organized into a sequence of Jupyter notebooks:
+The process now follows these notebooks:
 
-1. **1a-Process-GPI-Employment-Data.ipynb**
-2. **1b-Apply-Home-Based-Jobs.ipynb**
-3. **2a-Process-GPI-Population-Data-2025+.ipynb**
-4. **2b-Process-GPI-Population-Data-2023.ipynb**
-5. **3-Split-Box-Elder-And-Weber-Counties.ipynb**
-6. **4-Finalize.ipynb**
-
-Each notebook performs a distinct part of the workflow—from cleaning and aggregating raw GPI data to applying home-based jobs factors, splitting counties, and producing final model-ready datasets.
+1. **1-Process-GPI-Employment-Data.ipynb**
+2. **2a-Process-GPI-Population-Data-2025+.ipynb**
+3. **2b-Process-GPI-Population-Data-2023-2024.ipynb**
+4. **3-Split-Box-Elder-And-Weber-Counties.ipynb**
+5. **4-Apply-Home-Based-Jobs.ipynb**
+6. **5-Finalize.ipynb**
 
 ---
 
-## 📌 Overview
+# 📌 Overview
 
-The workflow produces standardized, validated, and model-ready employment and population datasets for all Utah counties and split-county model areas.  
-All outputs feed into travel demand modeling, dashboards, and scenario planning.
+The goal is to produce a consistent, validated, model-ready SE dataset covering employment and population across all Utah counties (including split counties used by WFRC, MAG, UDOT, etc.).  
+This updated workflow normalizes GPI inputs, applies model splits, and allocates home-based jobs (HBJ), producing final control totals by county, year, and variable.
 
 ---
 
-# 1. Employment Data Processing (Notebook: **1a**)
+# 1. Employment Processing
+
+### Notebook: **1-Process-GPI-Employment-Data.ipynb**
 
 ### **Purpose**
 
-Ingest raw GPI employment data and prepare consistent county-year-industry employment totals.
+Load, clean, and standardize GPI employment inputs for all available years.
 
 ### **Key Steps**
 
-- Load raw GPI employment data.
-- Standardize columns, FIPS codes, and year formats.
-- Join NAICS → TDM industry classification tables.
-- Clean numeric fields and remove placeholder rows.
+- Load GPI employment extract (industry × county × year).
+- Standardize column names, FIPS codes, year fields.
+- Convert wide format to long.
+- Join NAICS-to-TDM-sector crosswalk.
 - Aggregate employment by:
   - **County**
   - **Year**
   - **TDM sector**
-- Create validation summaries.
-- Output:  
-  `gpi_employment_by_county_df`
+- Validate totals and industry roll-ups.
+
+### **Output**
+
+`employment_raw_df` – cleaned, consistent employment table for all years.
 
 ---
 
-# 2. Apply Home-Based Jobs (HBJ) (Notebook: **1b**)
+# 2. Population Processing (2025 and later)
+
+### Notebook: **2a-Process-GPI-Population-Data-2025+.ipynb**
 
 ### **Purpose**
 
-Allocate total employment into **HBJ**, **NONHBJ**, and validate totals against base data.
+Process GPI population files for 2025+ using the newer unified format.
 
 ### **Key Steps**
 
-- Load employment data from Notebook 1a.
-- Load HBJ percent allocation table.
-- Compute:
-  - `HBJ = Employment × PercentHBJ`
-  - `NONHBJ = Employment − HBJ`
-- Validate:  
-  Compare `EMPCOUNT_BEFORE_HBJ` vs. `TOTAL_AFTER_HBJ`
-- Output:  
-  `tdm_employment_by_county_df`
-
----
-
-# 3. Process Population Data (2025+) (Notebook: **2a**)
-
-### **Purpose**
-
-Convert GPI population projections into a unified age-group format for years 2025 and beyond.
-
-### **Key Steps**
-
-- Load population data for 2025+.
-- Normalize fields and formats.
-- Reshape into long format.
-- Create standard age groups:
+- Load GPI population data beginning in 2025.
+- Standardize fields and geographic identifiers.
+- Build long-format table (County × Year × Age Group).
+- Group GPI age groups into:
   - **0–17**
   - **18–64**
   - **65+**
-- Validate subtotals = totals.
-- Output:  
-  `gpi_population_2025plus_df`
+- Validate that age-group totals sum to GPI’s total population.
+
+### **Output**
+
+`population_2025plus_df`
 
 ---
 
-# 4. Process 2023 Population Data (Notebook: **2b**)
+# 3. Population Processing (2023–2024)
+
+### Notebook: **2b-Process-GPI-Population-Data-2023-2024.ipynb**
 
 ### **Purpose**
 
-Align the differently formatted 2023 GPI population data with the 2025+ schema.
+Process 2023–2024 population data, which requires extra steps because GPI’s formatting for these years differs from the 2025+ structure.
+
+### **Key Points**
+
+- GPI **did provide age-breakdown data for all years**, including 2023 and 2024.
+- But **GPI did not provide 2023 and 2024 total population in the same format as the 2025+ files**.
+- Therefore:
+  - The **total population** for 2023–2024 is sourced from earlier GPI base files.
+  - The **age distribution** for 2023–2024 uses the later GPI age-breakdown extract.
+  - We apply age shares to the base totals so totals remain consistent with GPI’s official values.
 
 ### **Key Steps**
 
-- Load 2023 population tables.
-- Standardize fields.
-- Compute same three age groups as in Notebook 2a.
-- Produce fully compatible dataset for merging.
-- Output:  
-  `gpi_population_2023_df`
+- Load 2023–2024 population tables from both:
+  - Base GPI “official totals” file
+  - Updated GPI “age by year” file
+- Apply age shares to total population.
+- Produce long-format tables consistent with 2025+ outputs.
+- Validate roll-ups.
+
+### **Output**
+
+`population_2023_2024_df`
 
 ---
 
-# 5. Split Box Elder & Weber Counties (Notebook: **3**)
+# 4. County Splitting (Box Elder & Weber)
+
+### Notebook: **3-Split-Box-Elder-And-Weber-Counties.ipynb**
 
 ### **Purpose**
 
-Apply model-area split rules to counties that are subdivided for the travel demand model.
+Apply model-area split percentages so Box Elder and Weber counties are divided into model-specific subgeographies.
 
 ### **Key Steps**
 
-- Load county split percentages (e.g., WFRC share of Weber County).
-- Melt split tables into long form:
-  - `COUNTY, YEAR, CATEGORY, MODEL, PERCENT`
-- Join percentages to employment and population.
-- For each value:
-  - If split exists → `value × percent`
-  - Else → full value.
-- Validate:  
-  Sum(model-area splits) = original county totals.
-- Outputs:
-  - `employment_split_df`
-  - `population_split_df`
+- Load county-split percentages (by category × year).
+- Melt and join splits to both population and employment.
+- If a split exists → `value × percent`.  
+  Otherwise → use original county value.
+- Ensure:
+  - Sum(model-area values) = original county total.
+
+### **Outputs**
+
+- `population_split_df`
+- `employment_split_df`
 
 ---
 
-# 6. Finalize Combined SE Data (Notebook: **4**)
+# 5. Apply Home-Based Jobs (HBJ)
+
+### Notebook: **4-Apply-Home-Based-Jobs.ipynb**
 
 ### **Purpose**
 
-Merge all intermediate datasets and prepare final model-ready SE data.
+Allocate employment into **HBJ** and **Non-HBJ** using RSG’s latest factors.
 
 ### **Key Steps**
 
-- Load all processed datasets:
+- Load split employment dataset.
+- Load HBJ percentages (provided by RSG).
+- Compute:
+  - `HBJ = Employment × HBJ_pct`
+  - `NONHBJ = Employment - HBJ`
+- Validate totals pre- and post-HBJ.
+
+### **Output**
+
+`employment_hbj_df`
+
+---
+
+# 6. Finalize Combined SE Dataset
+
+### Notebook: **5-Finalize.ipynb**
+
+### **Purpose**
+
+Merge all processed datasets into final model-ready control totals.
+
+### **Key Steps**
+
+- Merge:
   - Employment (with HBJ)
-  - Split employment
-  - Population 2023 + 2025+
-  - Split population
-  - County names/metadata
-- Merge into a single long-format dataset:  
-  **CO_FIPS × YEAR × VARIABLE × VALUE**
-- Add derived metrics (HH size, per-capita values, etc.).
-- Pivot and aggregate for dashboards and modeling.
-- Run quality checks.
-- Output:
-  - `se_final_df`
-  - Dashboard pivot tables
-  - Modeling input files
+  - Population (2023–2024 + 2025+)
+  - Split geographies
+  - County metadata
+- Produce:
+  - County- and model-area–level SE tables
+  - Long-format (Year × County × Variable × Value)
+  - Pivot tables for dashboards
+- Run QA/QC checks (subtotals, splits, HBJ balance).
+
+### **Final Outputs**
+
+- `ControlTotal_SE_AllCounties.csv`
+- Dashboard-friendly pivot tables
+- Model input files
 
 ---
 
-# 📤 Final Outputs
-
-- TDM socio-economic inputs
+# 📊 Updated Workflow Diagram
